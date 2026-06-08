@@ -3,7 +3,7 @@ import Container from './Container'
 import Button from './Button'
 import ThemeToggle from './ThemeToggle'
 import { useTheme } from '../hooks/useTheme'
-import { CONSULTATION_HREF } from '../data/site'
+import { CONSULTATION_HREF, CONTACT_HREF, CONTACT_EMAIL } from '../data/site'
 
 type NavItem = { label: string; href: string }
 
@@ -126,6 +126,17 @@ export default function Navbar() {
         </nav>
 
         <div className="hidden items-center gap-2.5 lg:flex">
+          <a
+            href={CONTACT_HREF}
+            title={`Email us: ${CONTACT_EMAIL}`}
+            aria-label={`Email us at ${CONTACT_EMAIL}`}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-xl glass text-slate-200 transition-colors hover:border-brand-400/40 hover:text-white"
+          >
+            <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <rect x="3" y="5" width="18" height="14" rx="2.5" stroke="currentColor" strokeWidth="1.8" />
+              <path d="M4 7l8 5.5L20 7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </a>
           <ThemeToggle theme={theme} onToggle={toggleTheme} />
           <Button href={CONSULTATION_HREF} size="sm" variant="primary">
             Book Free Call
@@ -163,6 +174,17 @@ export default function Navbar() {
                     {item.label}
                   </a>
                 ))}
+                <a
+                  href={CONTACT_HREF}
+                  onClick={onNavigate}
+                  className="mt-1 flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-200 hover:bg-white/5 hover:text-white"
+                >
+                  <svg className="h-5 w-5 text-brand-300" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <rect x="3" y="5" width="18" height="14" rx="2.5" stroke="currentColor" strokeWidth="1.8" />
+                    <path d="M4 7l8 5.5L20 7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  <span className="truncate">{CONTACT_EMAIL}</span>
+                </a>
                 <Button href={CONSULTATION_HREF} size="sm" variant="primary" className="mt-2">
                   Book Free Call
                 </Button>

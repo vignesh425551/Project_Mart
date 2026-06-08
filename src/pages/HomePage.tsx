@@ -13,6 +13,7 @@ import { useTypewriter } from '../hooks/useTypewriter'
 import Pricing from '../components/Pricing'
 import Faq from '../components/Faq'
 import LeadForm from '../components/LeadForm'
+import ContactInfo from '../components/ContactInfo'
 import { Icon } from '../components/Icons'
 import { DomainCard, DemoProjectCard, FeatureCard, TestimonialCard } from '../components/Cards'
 import {
@@ -428,9 +429,13 @@ export default function HomePage() {
                     Send us a quick note about your domain and timeline. We’ll reply with a clear, structured plan for your final-year project.
                   </p>
 
-                  <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                  <div className="mt-6">
+                    <ContactInfo />
+                  </div>
+
+                  <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                     <Button href={CONSULTATION_HREF} variant="secondary">Book Free Consultation</Button>
-                    <Button href={CONTACT_HREF} variant="ghost">Or email directly →</Button>
+                    <Button href={CONTACT_HREF} variant="ghost">Email a Mentor →</Button>
                   </div>
                 </div>
               </Reveal>
