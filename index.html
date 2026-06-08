@@ -4,7 +4,48 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>new-pro</title>
+    <meta name="theme-color" content="#050816" />
+    <meta
+      name="description"
+      content="Final Year Project Mentorship — build industry-level AI/ML, Computer Vision, Web, and Data Science projects with expert one-on-one guidance, viva prep, and clean deliverables."
+    />
+    <meta name="color-scheme" content="dark" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="FYP Mentorship — Build Industry-Level Final Year Projects" />
+    <meta
+      property="og:description"
+      content="Expert guidance for AI/ML, Computer Vision, Web Development, and Data Science final-year projects."
+    />
+    <meta property="og:type" content="website" />
+
+    <!-- Inter font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <title>FYP Mentorship — Industry-Level Final Year Projects</title>
+
+    <!-- Set theme before paint to avoid a flash of the wrong theme -->
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem('fyp-theme')
+          var theme =
+            stored === 'light' || stored === 'dark'
+              ? stored
+              : window.matchMedia('(prefers-color-scheme: light)').matches
+                ? 'light'
+                : 'dark'
+          document.documentElement.setAttribute('data-theme', theme)
+        } catch (e) {
+          document.documentElement.setAttribute('data-theme', 'dark')
+        }
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>

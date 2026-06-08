@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef } from 'react'
 
 type ModalProps = {
   open: boolean
@@ -8,46 +8,72 @@ type ModalProps = {
 }
 
 export default function Modal({ open, title, children, onClose }: ModalProps) {
-  const [mounted, setMounted] = useState(false)
+  const panelRef = useRef<HTMLDivElement | null>(null)
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
+  // Escape to close + body scroll lock + basic focus trap while open
   useEffect(() => {
     if (!open) return
+
+    const previouslyFocused = document.activeElement as HTMLElement | null
+    document.body.style.overflow = 'hidden'
+
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
+      if (e.key === 'Escape') {
+        onClose()
+        return
+      }
+      if (e.key === 'Tab' && panelRef.current) {
+        const focusable = panelRef.current.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), input, [tabindex]:not([tabindex="-1"])',
+        )
+        if (focusable.length === 0) return
+        const first = focusable[0]
+        const last = focusable[focusable.length - 1]
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault()
+          last.focus()
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault()
+          first.focus()
+        }
+      }
     }
+
     window.addEventListener('keydown', onKeyDown)
-    return () => window.removeEventListener('keydown', onKeyDown)
+    // Focus the panel for screen readers / keyboard users
+    requestAnimationFrame(() => panelRef.current?.focus())
+
+    return () => {
+      window.removeEventListener('keydown', onKeyDown)
+      document.body.style.overflow = ''
+      previouslyFocused?.focus?.()
+    }
   }, [open, onClose])
 
-  if (!open || !mounted) return null
+  if (!open) return null
 
   return (
-    <div className="fixed inset-0 z-[100]">
+    <div className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto p-4 sm:p-6">
       <button
         type="button"
         aria-label="Close modal"
-        className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm"
+        className="fixed inset-0 bg-ink-950/80 backdrop-blur-md"
         onClick={onClose}
       />
 
       <div
+        ref={panelRef}
+        tabIndex={-1}
         role="dialog"
         aria-modal="true"
         aria-label={title}
-        className="relative mx-auto mt-10 w-[calc(100%-2rem)] max-w-3xl rounded-3xl border border-white/20 bg-white/90 p-5 shadow-xl backdrop-blur sm:p-7"
+        className="ring-gradient relative mt-6 w-full max-w-3xl rounded-3xl glass-strong p-5 shadow-[0_40px_120px_-30px_rgba(0,0,0,0.8)] outline-none duration-300 animate-[reveal-up_0.35s_ease] sm:mt-12 sm:p-7"
       >
         <div className="flex items-start justify-between gap-4">
-          <div>
-            <p className="text-sm font-bold text-indigo-700">{title}</p>
-          </div>
-
+          <p className="text-sm font-bold text-gradient">{title}</p>
           <button
             type="button"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-white/70 bg-white/70 text-slate-700 hover:bg-white"
+            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl glass text-slate-200 transition-colors hover:border-brand-400/40 hover:text-white"
             onClick={onClose}
             aria-label="Close"
           >
@@ -63,4 +89,3 @@ export default function Modal({ open, title, children, onClose }: ModalProps) {
     </div>
   )
 }
-
